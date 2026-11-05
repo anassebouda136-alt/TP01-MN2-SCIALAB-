@@ -1,0 +1,337 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{babel}
+\babelprovide[import, main]{french}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[a4paper,top=17mm,bottom=17mm,left=18mm,right=18mm,headheight=14pt]{geometry}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{caption}
+
+% Palette de couleurs academique (Institut 2iE - Bleu profond & Vert energie)
+\definecolor{primary}{RGB}{15, 76, 129}
+\definecolor{secondary}{RGB}{0, 128, 96}
+\definecolor{codebg}{RGB}{246, 248, 250}
+\definecolor{codeframe}{RGB}{208, 215, 222}
+\definecolor{commentgreen}{RGB}{34, 134, 58}
+\definecolor{keywordblue}{RGB}{0, 92, 197}
+\definecolor{stringred}{RGB}{215, 58, 73}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primary,
+    urlcolor=primary,
+    citecolor=primary,
+    pdftitle={TP 01 - Calculer une energie avec Scilab - Institut 2iE},
+    pdfauthor={BOUDA Abdoul Halim Anasse, DIALLO Abdallah Alwawi, ABDOURAHMAN Djabir}
+}
+
+\setlength{\parskip}{4pt plus 1pt minus 1pt}
+\setlength{\parindent}{0pt}
+
+% Boite de synthese / Takeaway
+\newcommand{\takeaway}[2]{%
+  \vspace{4pt}\noindent\colorbox{primary!8}{%
+    \parbox{\dimexpr\textwidth-2\fboxsep\relax}{%
+      \vspace{4pt}\textbf{\color{primary}#1 :}\hspace{0.4em}#2\vspace{4pt}%
+    }%
+  }\vspace{4pt}%
+}
+
+% Configuration du style Scilab pour listings
+\lstdefinelanguage{Scilab}{
+    keywords={function,endfunction,for,if,then,else,end,error,clear,clc,mprintf,length,zeros,modulo,abs,execstr,lasterror},
+    sensitive=true,
+    morecomment=[l]{//},
+    morestring=[b]"
+}
+
+\lstset{
+    language=Scilab,
+    backgroundcolor=\color{codebg},
+    frame=single,
+    rulecolor=\color{codeframe},
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{keywordblue}\bfseries,
+    commentstyle=\color{commentgreen}\itshape,
+    stringstyle=\color{stringred},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    numbersep=8pt,
+    breaklines=true,
+    breakatwhitespace=true,
+    showstringspaces=false,
+    tabsize=4,
+    captionpos=b,
+    aboveskip=5pt,
+    belowskip=4pt
+}
+
+% En-tete et pied de page
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textbf{Institut 2iE} -- MN2 (S4/S5D -- 2026--2027)}
+\fancyhead[R]{\small TP 01 : Intégration numérique avec Scilab}
+\fancyfoot[L]{\small BOUDA A. H. A., DIALLO A. A., ABDOURAHMAN D.}
+\fancyfoot[R]{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+
+% ============================================================================
+% EN-TETE DU RAPPORT
+% ============================================================================
+\begin{center}
+    {\Large\bfseries\color{primary} INSTITUT INTERNATIONAL D'INGÉNIERIE DE L'EAU ET DE L'ENVIRONNEMENT (2iE)}\\[2pt]
+    {\normalsize Méthodes Numériques 2 (MN2) -- S4/S5D -- Année académique 2026--2027 \quad|\quad Enseignant : \textbf{Dr Babacar LEYE}}\\[6pt]
+    
+    \colorbox{primary}{%
+        \parbox{\dimexpr\textwidth-2\fboxsep\relax}{%
+            \centering\vspace{5pt}
+            {\Large\bfseries\color{white} RAPPORT DE TRAVAUX PRATIQUES -- TP 01}\\[2pt]
+            {\normalsize\color{white} Calculer une énergie électrique par intégration numérique avec Scilab}
+            \vspace{5pt}
+        }%
+    }
+\end{center}
+
+\vspace{2pt}
+
+% Tableau des membres du groupe et depot GitHub
+\begin{tabularx}{\textwidth}{@{}l >{\raggedright\arraybackslash}X r@{}}
+\toprule
+\textbf{Nom et Prénom(s)} & \textbf{Contribution au TP} & \textbf{Matricule} \\
+\midrule
+\textbf{BOUDA Abdoul Halim Anasse} & Implémentation Scilab \& Rédaction LaTeX & \texttt{20240154} \\
+\textbf{DIALLO Abdallah Alwawi} & Implémentation Scilab \& Validation des tests & \texttt{20240163} \\
+\textbf{ABDOURAHMAN Djabir} & Analyse des incertitudes \& Interprétation physique & \texttt{20241054} \\
+\bottomrule
+\end{tabularx}
+
+\vspace{3pt}
+
+\noindent\colorbox{secondary!8}{%
+  \parbox{\dimexpr\textwidth-2\fboxsep\relax}{%
+    \vspace{3pt}
+    \textbf{\color{secondary}Références du dépôt GitHub (Code source Scilab rendu) :}\\[2pt]
+    \begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X@{}}
+      \textbf{Dépôt GitHub :} & \texttt{[https://github.com/anassebouda136-alt/TP01-MN2-Scilab]} \\
+      \textbf{Script rendu :} & \texttt{TP01\_Integration\_numerique\_Scilab.sce} \\
+      \textbf{Commit ID :} & \texttt{<identifiant-du-commit-git>} \emph{(accessible à l'enseignant)}
+    \end{tabularx}
+    \vspace{3pt}
+  }%
+}
+
+% ============================================================================
+% SECTION 1 : METHODE DES TRAPEZES
+% ============================================================================
+\section{Programmation de la méthode des trapèzes sur maillage quelconque}
+
+\subsection{Formulation mathématique et erreur de troncature}
+Soit une puissance $P(t)$ connue en $n+1$ instants strictement croissants $t_1 < t_2 < \dots < t_{n+1}$, auxquels correspondent les mesures $y_i = P(t_i)$ ($i \in \{1, \dots, n+1\}$). La méthode des trapèzes composite approche la fonction sur chaque sous-intervalle $[t_i, t_{i+1}]$ de largeur $h_i = t_{i+1} - t_i > 0$ par un segment de droite (interpolation linéaire de degré 1). L'intégrale approchée $T_n$ sur $[t_1, t_{n+1}]$ s'écrit :
+\begin{equation}
+    T_n = \sum_{i=1}^{n} \frac{t_{i+1} - t_i}{2}\,\bigl(y_i + y_{i+1}\bigr) = \sum_{i=1}^{n} h_i\,\frac{y_i + y_{i+1}}{2}.
+    \label{eq:trapezes}
+\end{equation}
+Cette formule reste applicable lorsque les pas temporels $h_i$ sont \textbf{inégaux}. Lorsque le pas $h$ est constant et que $P \in \mathcal{C}^2([t_1, t_{n+1}])$, l'erreur globale de quadrature vérifie :
+\begin{equation}
+    E_T(P) = \int_{t_1}^{t_{n+1}} P(t)\,\mathrm{d}t - T_n = -\frac{(t_{n+1} - t_1)\,h^2}{12}\,P''(\xi), \quad \xi \in [t_1, t_{n+1}],
+    \label{eq:err_trap}
+\end{equation}
+ce qui confère à la méthode un ordre de convergence quadratique $\mathcal{O}(h^2)$ (exacte pour les polynômes de degré $\le 1$).
+
+\subsection{Implémentation Scilab (\texttt{TODO 1} et \texttt{TODO 2})}
+Dans \texttt{trapezes(t, y)}, la boucle parcourt chaque sous-intervalle $i \in \{1, \dots, n\}$, vérifie la croissance stricte des temps ($h > 0$), puis calcule l'aire élémentaire \texttt{aire} avant de l'accumuler dans \texttt{q} :
+
+\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}[caption={Implémentation complète de la fonction \texttt{trapezes(t, y)} sous Scilab.}]
+function q = trapezes(t, y)
+    n = length(t) - 1;
+    // Les controles de taille sont deja fournis.
+    q = 0;
+    for i = 1:n
+        h = t(i+1) - t(i);
+        if h <= 0 then error("Temps non croissants."); end
+        // TODO 1 : aire sur [t(i), t(i+1)]
+        aire = h * (y(i) + y(i+1)) / 2;
+        // TODO 2 : ajouter aire au total
+        q = q + aire;
+    end
+endfunction
+\end{lstlisting}
+\end{minipage}
+
+% ============================================================================
+% SECTION 2 : METHODE DE SIMPSON
+% ============================================================================
+\section{Programmation de la méthode de Simpson composite}
+
+\subsection{Conditions de validité du maillage et poids de quadrature}
+La méthode de Simpson $1/3$ composite approche l'intégrande par des paraboles (degré 2) sur des paires de sous-intervalles adjacents $[t_{2k-1}, t_{2k+1}]$. Son application requiert impérativement \textbf{deux conditions} sur la grille :
+\begin{enumerate}
+    \item \textbf{Parité du nombre de sous-intervalles ($n$ pair)} : Le domaine $[t_1, t_{n+1}]$ doit comporter $n = 2m$ sous-intervalles. Sous Scilab, la condition « $n$ est impair » s'écrit \texttt{modulo(n, 2) <> 0} (\texttt{TODO 3}).
+    \item \textbf{Uniformité du pas ($h_i = h$ constant)} : Tous les sous-intervalles doivent avoir la même largeur $h = t_2 - t_1$. En arithmétique flottante IEEE 754, les différences $t_{i+1} - t_i$ pouvant présenter des résidus d'arrondi de l'ordre de $10^{-16}$, on compare l'écart $|pas - h|$ à une tolérance mise à l'échelle $\text{tol} = 10^{-10} \times \max(1, |h|)$ via \texttt{abs(pas - h) > tol} (\texttt{TODO 4}).
+\end{enumerate}
+
+En indexation Scilab ($1$ à $n+1$), les milieux de chaque paire portent des \textbf{indices pairs} ($i = 2, 4, \dots, n$, poids $4$) et les jonctions internes portent des \textbf{indices impairs} ($i = 3, 5, \dots, n-1$, poids $2$) :
+\begin{equation}
+    S_n = \frac{h}{3}\Bigl[\,y_1 + y_{n+1} + 4\sum_{\substack{i=2\\i\text{ pair}}}^{n} y_i + 2\sum_{\substack{i=3\\i\text{ impair}}}^{n-1} y_i\,\Bigr].
+    \label{eq:simpson}
+\end{equation}
+Pour $P \in \mathcal{C}^4([t_1, t_{n+1}])$, l'erreur globale est d'ordre $\mathcal{O}(h^4)$ (exacte pour tout polynôme de degré $\le 3$) :
+\begin{equation}
+    E_S(P) = \int_{t_1}^{t_{n+1}} P(t)\,\mathrm{d}t - S_n = -\frac{(t_{n+1} - t_1)\,h^4}{180}\,P^{(4)}(\eta), \quad \eta \in [t_1, t_{n+1}].
+    \label{eq:err_simp}
+\end{equation}
+
+\subsection{Implémentation Scilab (\texttt{TODO 3}, \texttt{TODO 4} et \texttt{TODO 5})}
+
+\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}[caption={Implémentation complète de la fonction \texttt{simpson(t, y)} sous Scilab.}]
+function q = simpson(t, y)
+    n = length(t) - 1;
+    // Les controles de taille et de croissance sont deja fournis.
+    // TODO 3 : remplacer %f par la condition "n est impair"
+    if modulo(n, 2) <> 0 then error("Simpson exige n pair."); end
+    h = t(2) - t(1);
+    echelle = 1;
+    if abs(h) > 1 then echelle = abs(h); end
+    tol = 1e-10 * echelle;
+    for i = 2:n
+        pas = t(i+1) - t(i);
+        // TODO 4 : comparer pas et h avec tol
+        if abs(pas - h) > tol then error("Simpson exige des pas egaux."); end
+    end
+
+    // b) Accumuler les poids dans la meme fonction
+    q = y(1) + y(n+1);
+    for i = 2:n
+        if modulo(i, 2) == 0 then
+            // TODO 5 : ajouter la contribution de poids 4
+            q = q + 4 * y(i);
+        else
+            // TODO 5 : ajouter la contribution de poids 2
+            q = q + 2 * y(i);
+        end
+    end
+    // TODO 5 : appliquer h/3 a la somme ponderee
+    q = (h / 3) * q;
+endfunction
+\end{lstlisting}
+\end{minipage}
+
+% ============================================================================
+% SECTION 3 : VERIFICATION SUR UN CAS CONNU
+% ============================================================================
+\section{Vérification et validation sur un cas analytique connu}
+
+Sur $[0, 4]\text{ s}$, on teste la puissance synthétique $P(t) = 10 + 4t - t^2\text{ W}$ aux instants $t = (0, 1, 2, 3, 4)\text{ s}$ ($n = 4$, $h = 1\text{ s}$), soit $P = (10, 13, 14, 13, 10)\text{ W}$ :
+\begin{itemize}
+    \item \textbf{Intégrale exacte} : $\displaystyle I_{\text{exact}} = \int_0^4 (10 + 4t - t^2)\,\mathrm{d}t = \left[10t + 2t^2 - \frac{t^3}{3}\right]_0^4 = 40 + 32 - \frac{64}{3} = \frac{152}{3}\text{ J} \approx 50,666667\text{ J}$.
+    \item \textbf{Trapèzes ($T_4$)} : $\displaystyle T_4 = 1 \times \bigl(11,5 + 13,5 + 13,5 + 11,5\bigr) = 50\text{ J}$. L'erreur $I_{\text{exact}} - T_4 = \frac{2}{3}\text{ J}$ vérifie exactement~\eqref{eq:err_trap} car $P''(t) = -2 \implies -\frac{4 \times 1^2}{12}(-2) = \frac{2}{3}\text{ J}$.
+    \item \textbf{Simpson ($S_4$)} : $\displaystyle S_4 = \frac{1}{3}\,\bigl[10 + 10 + 4(13 + 13) + 2(14)\bigr] = \frac{152}{3}\text{ J} \approx 50,666667\text{ J}$ (exact car $\deg(P) = 2 \le 3$, soit $P^{(4)} = 0$ dans~\eqref{eq:err_simp}).
+\end{itemize}
+
+\begin{table}[ht!]
+\centering
+\caption{Synthèse des tests de vérification fonctionnelle et de robustesse (Section 3).}
+\label{tab:verif}
+\begin{tabularx}{\textwidth}{@{}l l l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Cas de test} & \textbf{Grille $t$ (s)} & \textbf{Sortie Scilab} & \textbf{Validation théorique} \\
+\midrule
+Trapèzes régulier ($T_4$) & $[0, 1, 2, 3, 4]$ & $50,000000\text{ J}$ & Conforme ($50\text{ J}$, sous-estimation de $2/3\text{ J}$) \\
+Simpson régulier ($S_4$) & $[0, 1, 2, 3, 4]$ & $50,666667\text{ J}$ & Exact ($152/3\text{ J}$, polynôme de degré $2$) \\
+Trapèzes pas inégaux & $[0, 1, 3, 4]$ & $49,000000\text{ J}$ & Conforme ($11,5 + 26 + 11,5 = 49\text{ J}$) \\
+Simpson $n$ impair ($n=3$) & $[0, 1, 2, 3]$ & \texttt{error(...)} & Refus déclenché : \texttt{"Simpson exige n pair."} \\
+Simpson pas inégaux & $[0, 1, 3, 4, 5]$ & \texttt{error(...)} & Refus déclenché : \texttt{"Simpson exige des pas egaux."} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ============================================================================
+% SECTION 4 : CALCUL DE L'ENERGIE DE LA POMPE
+% ============================================================================
+\section{Calcul de l'énergie consommée par la pompe sur 40 minutes}
+
+\subsection{Conversion d'unités et données expérimentales (\texttt{TODO 6})}
+Pour exprimer l'énergie en $\text{kWh}$ à partir de puissances en $\text{kW}$, on convertit les temps $t_{\min} = (0, 10, 20, 30, 40)\text{ min}$ en heures par $t_h(i) = t_{\min}(i)/60$, soit un pas uniforme $h = \frac{10}{60} = \frac{1}{6}\text{ h} \approx 0,166667\text{ h}$ sur $n = 4$ sous-intervalles :
+
+\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}[caption={Conversion en heures (\texttt{TODO 6}) et calcul des énergies de la pompe.}]
+tmin = [0 10 20 30 40];
+Pkw = [2.0 2.6 3.0 2.5 1.9];
+th = zeros(1, length(tmin));
+for i = 1:length(tmin)
+    // TODO 6 : convertir tmin(i) en heures
+    th(i) = tmin(i) / 60;
+end
+ET = trapezes(th, Pkw);
+ES = simpson(th, Pkw);
+\end{lstlisting}
+\end{minipage}
+
+\begin{table}[ht!]
+\centering
+\caption{Relevés de la pompe et coefficients de pondération des deux quadratures ($n = 4$).}
+\label{tab:pompe_data}
+\begin{tabularx}{\textwidth}{@{}c c c c >{\centering\arraybackslash}X >{\centering\arraybackslash}X@{}}
+\toprule
+\textbf{Indice $i$} & \textbf{$t_{\min}$ (min)} & \textbf{$t_h$ (h)} & \textbf{$P_i$ (kW)} & \textbf{Coeff. Trapèzes ($\times h/2$)} & \textbf{Coeff. Simpson ($\times h/3$)} \\
+\midrule
+$1$ & $0$  & $0$   & $2,0$ & $1$ & $1$ \\
+$2$ & $10$ & $1/6$ & $2,6$ & $2$ & $4$ \\
+$3$ & $20$ & $2/6$ & $3,0$ & $2$ & $2$ \\
+$4$ & $30$ & $3/6$ & $2,5$ & $2$ & $4$ \\
+$5$ & $40$ & $4/6$ & $1,9$ & $1$ & $1$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Résultats numériques pour \texorpdfstring{$T_4$, $S_4$}{T4, S4} et leur écart absolu}
+\begin{align}
+    E_T = T_4 &= \frac{1}{6}\,\bigl(2,3 + 2,8 + 2,75 + 2,2\bigr) = \frac{10,05}{6} = \mathbf{1,675\text{ kWh}}, \\
+    E_S = S_4 &= \frac{1}{18}\,\bigl[2,0 + 1,9 + 4(2,6 + 2,5) + 2(3,0)\bigr] = \frac{30,3}{18} = \frac{10,1}{6} \approx \mathbf{1,683333\text{ kWh}}, \\
+    \Delta E_{\text{quad}} &= |E_S - E_T| = \left|\frac{10,1}{6} - \frac{10,05}{6}\right| = \frac{0,05}{6} = \frac{1}{120}\text{ kWh} \approx \mathbf{0,008333\text{ kWh}} \;\;(8,33\text{ Wh}).
+\end{align}
+
+% ============================================================================
+% SECTION 5 : INTERPRETATION PHYSIQUE ET CONCLUSION
+% ============================================================================
+\section{Interprétation physique, analyse d'incertitude et conclusion}
+
+\subsection{Comparaison avec l'incertitude de lecture et limites d'échantillonnage}
+Chaque lecture de puissance ayant une incertitude bornée par $\delta P_{\max} = 0,1\text{ kW}$ sur une durée $\Delta T = \frac{40}{60}\text{ h} = \frac{2}{3}\text{ h}$, la contribution maximale de ces lectures à l'incertitude sur l'énergie vaut :
+\begin{equation}
+    \Delta E_{\text{mesure}} = 0,1 \times \frac{40}{60} = \frac{1}{15}\text{ kWh} \approx \mathbf{0,066667\text{ kWh}} \;\;(\approx 0,07\text{ kWh}), \qquad \frac{\Delta E_{\text{mesure}}}{\Delta E_{\text{quad}}} = \frac{1/15}{1/120} = \mathbf{8}.
+\end{equation}
+
+\begin{itemize}
+    \item \textbf{Peut-on affirmer que Simpson donne l'énergie réelle la plus juste ?} \textbf{Non.} L'écart entre Simpson et les trapèzes ($0,0083\text{ kWh}$) est \textbf{huit fois inférieur} à l'incertitude expérimentale des capteurs ($\pm 0,0667\text{ kWh}$). La précision réelle est donc gouvernée par l'instrumentation et non par l'ordre théorique de la quadrature.
+    \item \textbf{Les relevés espacés de 10 minutes peuvent-ils manquer des variations ?} \textbf{Oui.} Un relevé toutes les $10\text{ min}$ ignore toute fluctuation rapide (démarrage, régime transitoire ou variation brusque de charge) survenant entre deux mesures consécutives.
+    \item \textbf{Énergie annoncée avec une précision défendable :} $\mathbf{E = 1,68 \pm 0,07\text{ kWh}}$ (soit environ $\mathbf{1,7\text{ kWh}}$).
+\end{itemize}
+
+\subsection{Bloc de conclusion commenté dans le script (\texttt{TODO 7})}
+\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}[caption={Conclusion de quatre lignes inscrite dans le fichier \texttt{.sce} (\texttt{TODO 7}).}]
+// TODO 7 : remplacer ces lignes par votre conclusion.
+// Energie estimee (avec unite) : 1.68 +- 0.07 kWh (T4 = 1.675 kWh, S4 = 1.683 kWh, soit env. 1.7 kWh).
+// Ecart entre les deux methodes : |ES - ET| = 0.0083 kWh (1/120 kWh), tres faible en valeur absolue.
+// Comparaison avec l'incertitude des lectures : L'ecart (0.0083 kWh) est 8 fois inferieur a l'incertitude des mesures (0.0667 kWh) ; on ne peut donc pas affirmer que Simpson donne l'energie reelle la plus juste.
+// Limite des releves espaces de 10 min : Des releves toutes les 10 min peuvent manquer des variations rapides, pics de charge ou regimes transitoires de la pompe entre deux mesures.
+\end{lstlisting}
+\end{minipage}
+
+\takeaway{Bilan méthodologique}{Pour améliorer la précision sur l'énergie réellement consommée par la pompe, il est prioritaire de réduire l'incertitude des wattmètres ($\delta P < 0,1\text{ kW}$) et d'augmenter la fréquence d'acquisition ($\Delta t \ll 10\text{ min}$) plutôt que d'augmenter l'ordre polynomial de la quadrature.}
+
+\end{document}
